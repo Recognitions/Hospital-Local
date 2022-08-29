@@ -1,0 +1,106 @@
+*{
+    margin: 0px;
+    outline: none;
+    font-family: arial;
+}
+:root{
+    --color1: #111;
+    --color2: #222;
+    --color3: #333;
+    --color4: #444;
+    --color5: #555;
+    --color6: #666;
+    --color7: #777;
+    --color8: #888;
+    --color9: #999;
+    --color10: #f8f8f8;
+}
+header{
+    background-color: var(--color2);
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+}
+button{
+    border: 1px solid var(--color2);
+    background-color: var(--color4);
+    color: var(--color10);
+    font-size: 18px;
+    text-shadow: 1px 1px 1px var(--color1);
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+main{
+    height: 100vh;
+    background-color: var(--color3);
+    color: #f8f8f8;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}main h2{
+    margin: 10px;
+}
+table{
+    background-color: var(--color2);
+    padding: 10px;
+    width: 97%;
+    border-radius: 10px;
+}
+table th{
+    border-bottom: 1px solid var(--color10);
+    padding: 10px;
+    box-shadow: 0px -5px 0px var(--color5);
+    background-color: var(--color3);
+}
+
+input[type=text],input[type=email],input[type=password],input[type=date]{
+    border: 3px solid var(--color3);
+    font-size: 18px;
+    padding: 5px;
+    background-color: var(--color4);
+    color: var(--color10);
+    border-radius: 10px;
+}
+
+.page{
+    position: fixed;
+    top: 0px;
+    background-color: rgba(0,0,0,0.5);
+    width: 100%;
+    height: 100%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    color: var(--color10);
+}
+#patient form, #edit form{
+    width: 30%;
+    padding: 20px;
+    border: 3px solid var(--color2);
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px 1px rgba(0,0,0,0.1);
+    background-color: var(--color3);
+    font-size: 18px;
+}
+#patient form h3, #edit form h3{
+    display: flex;
+    justify-content: center;
+    margin: 10px;
+    margin-top: -10px;
+}
+#patient form div, #edit form div{
+    display: flex;
+    flex-direction: column
+}
+#patient form div:last-child, #edit form div:last-child{
+    margin-top: 20px;
+}
+#patient form div:last-child button:first-child, #edit form div:last-child button:first-child{
+    background-color: green;
+}
+#patient form div:last-child button:last-child, #edit form div:last-child button:last-child{
+    background-color: rgb(196, 0, 0);
+}
+
