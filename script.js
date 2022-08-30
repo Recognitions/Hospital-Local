@@ -46,6 +46,7 @@ function render(){
         document.querySelector(`#E${patient.id}`).addEventListener("click",()=>{
             const edit = document.getElementById("edit")
             edit.style.display="flex"
+            document.querySelector("#edit form").id=patient.id
             document.querySelector("#eName").value=patient.name
             document.querySelector("#eCpf").value=patient.cpf
             document.querySelector("#eWpp").value=patient.wpp
@@ -67,8 +68,18 @@ function newPatient(name,cpf,wpp,birth){
 
     name.value=cpf.value=wpp.value=birth.value=""
 }
-function editPatient(id){
-
+function editPatient(id,name,cpf,wpp,birth){
+    const storage = localStorage.getItem("patients")
+    const patients = storage ? JSON.parse(storage) : []
+    const uPatient = {
+        id:id.id,
+        name:name.value,
+        cpf:cpf.value,
+        wpp:wpp.value,
+        birth:birth.value
+    }
+    localStorage.setItem("patients", JSON.stringify([...patients,uPatient]))
+    document.getElementById("edit").style.display="none"
 }
 function deletePatient(id){
     const patients = JSON.parse(localStorage.getItem("patients"))
@@ -95,6 +106,20 @@ document.querySelector("#patient form").addEventListener("submit",(event)=>{
     )
     render()
 })
+
+document.querySelector("#edit form").addEventListener("submit",(event)=>{
+    event.preventDefault()
+    deletePatient(document.querySelector("#edit form").id)
+    editPatient(
+        document.querySelector("#edit form"),
+        document.querySelector("#eName"),
+        document.querySelector("#eCpf"),
+        document.querySelector("#eWpp"),
+        document.querySelector("#eBirth"),
+    )
+    render()
+})
+
 document.querySelector("#patient form div:last-child button:last-child").addEventListener("click",()=>{
     patient.style.display="none"
 })
