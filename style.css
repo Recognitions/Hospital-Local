@@ -54,7 +54,6 @@ table th{
     box-shadow: 0px -5px 0px var(--color5);
     background-color: var(--color3);
 }
-
 input[type=text],input[type=email],input[type=password],input[type=date]{
     border: 3px solid var(--color3);
     font-size: 18px;
@@ -63,7 +62,6 @@ input[type=text],input[type=email],input[type=password],input[type=date]{
     color: var(--color10);
     border-radius: 10px;
 }
-
 .page{
     position: fixed;
     top: 0px;
@@ -103,7 +101,6 @@ input[type=text],input[type=email],input[type=password],input[type=date]{
 #patient form div:last-child button:last-child, #edit form div:last-child button:last-child, #consult form div:last-child button:last-child{
     background-color: rgb(196, 0, 0);
 }
-
 .consultDiv{
     display: flex;
     flex-direction: column;
