@@ -122,7 +122,6 @@ input[type=text],input[type=email],input[type=password],input[type=date]{
     justify-content: space-between;
     margin: 5px;
 }
-
 button:hover{
     filter: brightness(1.5);
 }
