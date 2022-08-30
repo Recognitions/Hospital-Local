@@ -61,13 +61,13 @@ function render(){
         })
     })
 }
-function newPatient(name,cpf,wpp,birth){
+function newPatient(newP){
     const newPatient = {
         id:uuidv4(),
-        name: name.value,
-        cpf: cpf.value,
-        wpp: wpp.value,
-        birth: birth.value,
+        name: newP.name,
+        cpf: newP.cpf,
+        wpp: newP.wpp,
+        birth: newP.birth,
         covid:{
             symp:[],
             num:0,
@@ -78,7 +78,7 @@ function newPatient(name,cpf,wpp,birth){
     const patients = storage ? JSON.parse(storage) : []
     localStorage.setItem("patients", JSON.stringify([...patients,newPatient]))
 
-    name.value=cpf.value=wpp.value=birth.value=""
+    document.querySelector("#name").value=document.querySelector("#cpf").value=document.querySelector("#wpp").value=document.querySelector("#birth").value=""
 }
 function editPatient(id,name,cpf,wpp,birth){
     const storage = localStorage.getItem("patients")
@@ -91,7 +91,7 @@ function editPatient(id,name,cpf,wpp,birth){
         birth:birth.value,
         covid:{
             symp:[],
-            num:symp.length,
+            num:0,
             result:"Não Atendido"
         }
     }
@@ -126,12 +126,13 @@ document.querySelector("#new").addEventListener("click",()=>{
 })
 document.querySelector("#patient form").addEventListener("submit",(event)=>{
     event.preventDefault()
-    newPatient(
-        document.querySelector("#name"),
-        document.querySelector("#cpf"),
-        document.querySelector("#wpp"),
-        document.querySelector("#birth"),
-    )
+    const newP = {
+        name: document.querySelector("#name").value,
+        cpf: document.querySelector("#cpf").value,
+        wpp: document.querySelector("#wpp").value,
+        birth: document.querySelector("#birth").value,
+    }
+    newPatient(newP)
     render()
 })
 
@@ -167,6 +168,27 @@ wpp.addEventListener("keypress",()=>{
         wpp.value+=")"
     } else if(length==9){
         wpp.value+="-"
+    }
+})
+let eCpf = document.querySelector("#eCpf")
+eCpf.addEventListener("keypress",()=>{
+    let length = eCpf.value.length
+    if(length==3 || length==7){
+        eCpf.value+="."
+    }
+    if(eCpf.value.length==11){
+        eCpf.value+="-"
+    }
+})
+let eWpp = document.querySelector("#eWpp")
+eWpp.addEventListener("keypress",()=>{
+    let length = eWpp.value.length
+    if(length==0){
+        eWpp.value+="("
+    } else if(length==3){
+        eWpp.value+=")"
+    } else if(length==9){
+        eWpp.value+="-"
     }
 })
 
