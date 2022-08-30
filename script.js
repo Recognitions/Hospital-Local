@@ -48,6 +48,7 @@ function render(){
         document.querySelector(`#D${patient.id}`).addEventListener("click",()=>{
             deletePatient(patient.id)
             render()
+            message("Paciente Deletado com Sucesso!")
         })
         document.querySelector(`#E${patient.id}`).addEventListener("click",()=>{
             const edit = document.getElementById("edit")
@@ -133,6 +134,39 @@ document.querySelector("#new").addEventListener("click",()=>{
     const patient = document.getElementById("patient")
     patient.style.display="flex"
 })
+function CPF(cpf){
+    cpf = cpf.replace(/[^\d]+/g, '');
+    if (cpf == '') return false;
+    if (cpf.length != 11 ||
+        cpf == "00000000000" ||
+        cpf == "11111111111" ||
+        cpf == "22222222222" ||
+        cpf == "33333333333" ||
+        cpf == "44444444444" ||
+        cpf == "55555555555" ||
+        cpf == "66666666666" ||
+        cpf == "77777777777" ||
+        cpf == "88888888888" ||
+        cpf == "99999999999")
+        return false;
+    let add = 0;
+    for (let i = 0; i < 9; i++)
+        add += parseInt(cpf.charAt(i)) * (10 - i);
+    let rev = 11 - (add % 11);
+    if (rev == 10 || rev == 11)
+        rev = 0;
+    if (rev != parseInt(cpf.charAt(9)))
+        return false;
+    add = 0;
+    for (let i = 0; i < 10; i++)
+        add += parseInt(cpf.charAt(i)) * (11 - i);
+    rev = 11 - (add % 11);
+    if (rev == 10 || rev == 11)
+        rev = 0;
+    if (rev != parseInt(cpf.charAt(10)))
+        return false;
+    return true;
+}
 document.querySelector("#patient form").addEventListener("submit",(event)=>{
     event.preventDefault()
     const newP = {
@@ -141,22 +175,32 @@ document.querySelector("#patient form").addEventListener("submit",(event)=>{
         wpp: document.querySelector("#wpp").value,
         birth: document.querySelector("#birth").value,
     }
-    newPatient(newP)
-    message("Paciente Cadastrado com Sucesso!")
-    render()
+    if(CPF(newP.cpf)==true){
+        newPatient(newP)
+        render()
+        message("Paciente Cadastrado com Sucesso!")
+    }else{
+        alert("CPF Inválido!")
+    }
 })
 
 document.querySelector("#edit form").addEventListener("submit",(event)=>{
     event.preventDefault()
-    deletePatient(document.querySelector("#edit form").id)
-    editPatient(
-        document.querySelector("#edit form"),
-        document.querySelector("#eName"),
-        document.querySelector("#eCpf"),
-        document.querySelector("#eWpp"),
-        document.querySelector("#eBirth"),
-    )
-    render()
+    if(CPF(document.querySelector("#eCpf").value)==true){
+        deletePatient(document.querySelector("#edit form").id)
+        editPatient(
+            document.querySelector("#edit form"),
+            document.querySelector("#eName"),
+            document.querySelector("#eCpf"),
+            document.querySelector("#eWpp"),
+            document.querySelector("#eBirth"),
+        )
+        render()
+        message("Paciente Editado com Sucesso!")
+    }else{
+        alert("CPF Inválido!")
+    }
+    
 })
 
 let cpf = document.querySelector("#cpf")
@@ -167,6 +211,9 @@ cpf.addEventListener("keypress",()=>{
     }
     if(cpf.value.length==11){
         cpf.value+="-"
+    }
+    if(length>=13){
+        console.log("oi")
     }
 })
 let wpp = document.querySelector("#wpp")
@@ -242,11 +289,11 @@ sympList.forEach((symp)=>{
         }
         
         if(sympQt>=9){
-            r = "Possível Infectado"
+            r = "<label style='color:red'>Possível Infectado</label>"
         }else if(sympQt>=6 && sympQt<9){
-            r = "Potencial Infectado"
+            r = "<label style='color:yellow'>Potencial Infectado</label>"
         }else if(sympQt<6){
-            r = "Sintomas Insuficientes"
+            r = "<label style='color:#00ff15'>Sintomas Insuficientes</label>"
         }else if(sympQt==0){
             r = "Não Atendido"
         }
@@ -275,6 +322,7 @@ document.querySelector("#consult form").addEventListener("submit",(event)=>{
     deletePatient(cons.id)
     consultPatient(cons)
     render()
+    message("Paciente Consultado com Sucesso!")
 })
 
 document.querySelector("#patient button[type=reset]").addEventListener("click",()=>{

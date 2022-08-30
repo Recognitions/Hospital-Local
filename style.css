@@ -123,14 +123,8 @@ input[type=text],input[type=email],input[type=password],input[type=date]{
     margin: 5px;
 }
 
-tbody tr td button:first-child{
-    background-color: green;
-}
-tbody tr td button{
-    background-color: rgb(195, 85, 0);
-}
-tbody tr td button:last-child{
-    background-color: rgb(176, 0, 0);
+button:hover{
+    filter: brightness(1.5);
 }
 .message{
     position: absolute;
@@ -146,4 +140,5 @@ tbody tr td button:last-child{
     text-shadow: 2px 2px 2px black;
     transition: 0.2s;
     z-index: 10;
+    text-transform: uppercase;
 }
