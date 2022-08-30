@@ -1,5 +1,14 @@
 import { v4 as uuidv4 } from 'https://jspm.dev/uuid';
 
+function message(txt){
+    const msg = document.querySelector(".message")
+    const text = document.querySelector(".message h1")
+    text.innerHTML = txt
+    msg.style.display="flex"
+    setInterval(()=>{
+        msg.style.display="none"
+    },3000)
+}
 
 function render(){
     const storage = localStorage.getItem("patients")
@@ -133,6 +142,7 @@ document.querySelector("#patient form").addEventListener("submit",(event)=>{
         birth: document.querySelector("#birth").value,
     }
     newPatient(newP)
+    message("Paciente Cadastrado com Sucesso!")
     render()
 })
 
