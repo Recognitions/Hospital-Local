@@ -75,7 +75,7 @@ input[type=text],input[type=email],input[type=password],input[type=date]{
     justify-content: center;
     color: var(--color10);
 }
-#patient form, #edit form{
+#patient form, #edit form, #consult form{
     width: 30%;
     padding: 20px;
     border: 3px solid var(--color2);
@@ -97,10 +97,28 @@ input[type=text],input[type=email],input[type=password],input[type=date]{
 #patient form div:last-child, #edit form div:last-child{
     margin-top: 20px;
 }
-#patient form div:last-child button:first-child, #edit form div:last-child button:first-child{
+#patient form div:last-child button:first-child, #edit form div:last-child button:first-child, #consult form div:last-child button:first-child{
     background-color: green;
 }
-#patient form div:last-child button:last-child, #edit form div:last-child button:last-child{
+#patient form div:last-child button:last-child, #edit form div:last-child button:last-child, #consult form div:last-child button:last-child{
     background-color: rgb(196, 0, 0);
 }
 
+.consultDiv{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}.consultDiv div{
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+}.consultDiv div label{
+    margin: 5px;
+}
+.sympArea{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin: 5px;
+}

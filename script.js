@@ -20,17 +20,14 @@ function render(){
             age-=1
         }
 
-
-
         const tr = document.createElement("tr")
-        tr.setAttribute("title",patient.birth)
         tr.innerHTML = `
             <tr>
                 <td>${patient.name}</td>
                 <td>${patient.cpf}</td>
                 <td>${patient.wpp}</td>
                 <td>${age}</td>
-                <td>Não Atendido</td>
+                <td title="Sintomas: ${patient.covid.num}">${patient.covid.result}</td>
                 <td>
                     <button id="C${patient.id}">Consultar</button>
                     <button id="E${patient.id}">Editar</button>
@@ -52,6 +49,16 @@ function render(){
             document.querySelector("#eWpp").value=patient.wpp
             document.querySelector("#eBirth").value=patient.birth
         })
+        document.querySelector(`#C${patient.id}`).addEventListener("click",()=>{
+            const consult = document.getElementById("consult")
+            consult.style.display="flex"
+            document.querySelector("#consult form").dataset.id=patient.id
+            document.querySelector("#consult form").dataset.name=patient.name
+            document.querySelector("#consult form").dataset.cpf=patient.cpf
+            document.querySelector("#consult form").dataset.wpp=patient.wpp
+            document.querySelector("#consult form").dataset.birth=patient.birth
+            
+        })
     })
 }
 function newPatient(name,cpf,wpp,birth){
@@ -60,7 +67,12 @@ function newPatient(name,cpf,wpp,birth){
         name: name.value,
         cpf: cpf.value,
         wpp: wpp.value,
-        birth: birth.value
+        birth: birth.value,
+        covid:{
+            symp:[],
+            num:0,
+            result:"Não Atendido"
+        }
     }
     const storage = localStorage.getItem("patients")
     const patients = storage ? JSON.parse(storage) : []
@@ -76,7 +88,12 @@ function editPatient(id,name,cpf,wpp,birth){
         name:name.value,
         cpf:cpf.value,
         wpp:wpp.value,
-        birth:birth.value
+        birth:birth.value,
+        covid:{
+            symp:[],
+            num:symp.length,
+            result:"Não Atendido"
+        }
     }
     localStorage.setItem("patients", JSON.stringify([...patients,uPatient]))
     document.getElementById("edit").style.display="none"
@@ -88,8 +105,19 @@ function deletePatient(id){
     })
     localStorage.setItem("patients",JSON.stringify(newPatient))
 }
-function consultPatient(){
-
+function consultPatient(cons){
+    const storage = localStorage.getItem("patients")
+    const patients = storage ? JSON.parse(storage) : []
+    const cPatient = {
+        id: cons.id,
+        name: cons.name,
+        cpf: cons.cpf,
+        wpp: cons.wpp,
+        birth: cons.birth,
+        covid: cons.covid
+    }
+    localStorage.setItem("patients", JSON.stringify([...patients,cPatient]))
+    document.getElementById("consult").style.display="none"
 }
 document.addEventListener('DOMContentLoaded',render)
 document.querySelector("#new").addEventListener("click",()=>{
@@ -120,13 +148,6 @@ document.querySelector("#edit form").addEventListener("submit",(event)=>{
     render()
 })
 
-document.querySelector("#patient form div:last-child button:last-child").addEventListener("click",()=>{
-    patient.style.display="none"
-})
-document.querySelector("#edit form div:last-child button:last-child").addEventListener("click",()=>{
-    edit.style.display="none"
-})
-
 let cpf = document.querySelector("#cpf")
 cpf.addEventListener("keypress",()=>{
     let length = cpf.value.length
@@ -147,4 +168,92 @@ wpp.addEventListener("keypress",()=>{
     } else if(length==9){
         wpp.value+="-"
     }
+})
+
+
+const sympList = [
+    "Febre",
+    "Coriza",
+    "Nariz entupido",
+    "Cansaço",
+    "Tosse",
+    "Dor de cabeça",
+    "Dores no corpo",
+    "Mal estar geral",
+    "Dor de garganta",
+    "Dificuldade de respirar",
+    "Falta de paladar",
+    "Falta de olfato",
+    "Dificuldade de locomoção",
+    "Diarréia"
+]
+let sympQt = 0
+let patientSymp = []
+let r = "Não Atendido"
+let consultDiv = document.querySelector(".consultDiv")
+sympList.forEach((symp)=>{
+    const div = document.createElement("div")
+    let checkBoxId = uuidv4()
+    div.innerHTML=`
+        <label for="">${symp}</label>
+        <input type="checkbox" id="S${checkBoxId}" value="1">
+    `
+    consultDiv.appendChild(div)
+    const checkbox = document.querySelector(`#S${checkBoxId}`)
+    checkbox.addEventListener("click",()=>{
+        if(checkbox.checked==true){
+            sympQt+=1
+            patientSymp.push(symp)
+        }else{
+            sympQt-=1
+            patientSymp.splice(patientSymp.indexOf(symp),1)
+        }
+        
+        if(sympQt>=9){
+            r = "Possível Infectado"
+        }else if(sympQt>=6 && sympQt<9){
+            r = "Potencial Infectado"
+        }else if(sympQt<6){
+            r = "Sintomas Insuficientes"
+        }else if(sympQt==0){
+            r = "Não Atendido"
+        }
+        document.querySelector(".sympArea").innerHTML=`
+            <label>Sintomas: ${sympQt}</label>
+            <label>Resultado: ${r}</label>
+        `
+
+    })
+})
+
+document.querySelector("#consult form").addEventListener("submit",(event)=>{
+    event.preventDefault()
+    const cons = {
+        id: document.querySelector("#consult form").dataset.id,
+        name: document.querySelector("#consult form").dataset.name,
+        cpf: document.querySelector("#consult form").dataset.cpf,
+        wpp: document.querySelector("#consult form").dataset.wpp,
+        birth: document.querySelector("#consult form").dataset.birth,
+        covid:{
+            symp:patientSymp,
+            num:sympQt,
+            result:r
+        }
+    }
+    deletePatient(cons.id)
+    consultPatient(cons)
+    render()
+})
+
+document.querySelector("#patient button[type=reset]").addEventListener("click",()=>{
+    patient.style.display="none"
+})
+document.querySelector("#edit button[type=reset]").addEventListener("click",()=>{
+    edit.style.display="none"
+})
+document.querySelector("#consult button[type=reset]").addEventListener("click",()=>{
+    consult.style.display="none"
+    sympQt=0
+    patientSymp=[]
+    document.querySelector(".sympArea").innerHTML=""
 })
