@@ -249,7 +249,6 @@ eWpp.addEventListener("keypress",()=>{
     }
 })
 
-
 const sympList = [
     "Febre",
     "Coriza",
@@ -319,10 +318,14 @@ document.querySelector("#consult form").addEventListener("submit",(event)=>{
             result:r
         }
     }
-    deletePatient(cons.id)
-    consultPatient(cons)
-    render()
-    message("Paciente Consultado com Sucesso!")
+    if(sympQt>0){
+        deletePatient(cons.id)
+        consultPatient(cons)
+        render()
+        message("Paciente Consultado com Sucesso!")
+    }else{
+        alert("Nenhum sintoma apresentado!")
+    }
 })
 
 document.querySelector("#patient button[type=reset]").addEventListener("click",()=>{
