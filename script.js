@@ -129,7 +129,6 @@ function consultPatient(cons){
         covid: cons.covid
     }
     localStorage.setItem("patients", JSON.stringify([...patients,cPatient]))
-    document.getElementById("consult").style.display="none"
 }
 document.addEventListener('DOMContentLoaded',render)
 document.querySelector("#new").addEventListener("click",()=>{
