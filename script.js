@@ -46,9 +46,11 @@ function render(){
         `
         tbody.appendChild(tr)
         document.querySelector(`#D${patient.id}`).addEventListener("click",()=>{
-            deletePatient(patient.id)
-            render()
-            message("Paciente Deletado com Sucesso!")
+            if(confirm("Deseja deletar esse paciente?")==true){
+                deletePatient(patient.id)
+                render()
+                message("Paciente Deletado com Sucesso!")
+            }
         })
         document.querySelector(`#E${patient.id}`).addEventListener("click",()=>{
             const edit = document.getElementById("edit")
@@ -176,9 +178,11 @@ document.querySelector("#patient form").addEventListener("submit",(event)=>{
         birth: document.querySelector("#birth").value,
     }
     if(CPF(newP.cpf)==true){
-        newPatient(newP)
-        render()
-        message("Paciente Cadastrado com Sucesso!")
+        if(confirm("Confirma o cadastro do paciente?")==true){
+            newPatient(newP)
+            render()
+            message("Paciente Cadastrado com Sucesso!")
+        }
     }else{
         alert("CPF Inválido!")
     }
@@ -187,16 +191,18 @@ document.querySelector("#patient form").addEventListener("submit",(event)=>{
 document.querySelector("#edit form").addEventListener("submit",(event)=>{
     event.preventDefault()
     if(CPF(document.querySelector("#eCpf").value)==true){
-        deletePatient(document.querySelector("#edit form").id)
-        editPatient(
-            document.querySelector("#edit form"),
-            document.querySelector("#eName"),
-            document.querySelector("#eCpf"),
-            document.querySelector("#eWpp"),
-            document.querySelector("#eBirth"),
-        )
-        render()
-        message("Paciente Editado com Sucesso!")
+        if(confirm("Deseja confirmar as edições?")==true){
+            deletePatient(document.querySelector("#edit form").id)
+            editPatient(
+                document.querySelector("#edit form"),
+                document.querySelector("#eName"),
+                document.querySelector("#eCpf"),
+                document.querySelector("#eWpp"),
+                document.querySelector("#eBirth"),
+            )
+            render()
+            message("Paciente Editado com Sucesso!")
+        }
     }else{
         alert("CPF Inválido!")
     }
@@ -211,9 +217,6 @@ cpf.addEventListener("keypress",()=>{
     }
     if(cpf.value.length==11){
         cpf.value+="-"
-    }
-    if(length>=13){
-        console.log("oi")
     }
 })
 let wpp = document.querySelector("#wpp")
@@ -319,10 +322,12 @@ document.querySelector("#consult form").addEventListener("submit",(event)=>{
         }
     }
     if(sympQt>0){
-        deletePatient(cons.id)
-        consultPatient(cons)
-        render()
-        message("Paciente Consultado com Sucesso!")
+        if(confirm("Deseja confirmar a consulta?")==true){
+            deletePatient(cons.id)
+            consultPatient(cons)
+            render()
+            message("Paciente Consultado com Sucesso!")
+        }
     }else{
         alert("Nenhum sintoma apresentado!")
     }
